@@ -14,7 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          category: Database["public"]["Enums"]["product_category"]
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          purchase_link: string | null
+          quantity_reserved: number
+          quantity_total: number
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["product_category"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          purchase_link?: string | null
+          quantity_reserved?: number
+          quantity_total?: number
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["product_category"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          purchase_link?: string | null
+          quantity_reserved?: number
+          quantity_total?: number
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          created_at: string
+          guest_name: string
+          guest_whatsapp: string
+          id: string
+          message: string | null
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          guest_name: string
+          guest_whatsapp: string
+          id?: string
+          message?: string | null
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          guest_name?: string
+          guest_whatsapp?: string
+          id?: string
+          message?: string | null
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +93,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      product_category:
+        | "farmacia_cuidados"
+        | "roupas"
+        | "quarto_passeio"
+        | "amamentacao"
+        | "banho"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +225,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      product_category: [
+        "farmacia_cuidados",
+        "roupas",
+        "quarto_passeio",
+        "amamentacao",
+        "banho",
+      ],
+    },
   },
 } as const
