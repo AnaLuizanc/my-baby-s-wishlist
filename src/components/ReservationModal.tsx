@@ -12,33 +12,33 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Heart } from "lucide-react";
+import { Heart, Sun } from "lucide-react";
+import type { CartItem } from "@/hooks/useCart";
 
 interface ReservationModalProps {
   open: boolean;
   onClose: () => void;
-  productId: string | null;
-  productName: string;
+  cartItems: CartItem[];
   onSuccess: () => void;
 }
 
 const ReservationModal = ({
   open,
   onClose,
-  productId,
-  productName,
+  cartItems,
   onSuccess,
 }: ReservationModalProps) => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim() || !whatsapp.trim()) {
-      toast.error("Por favor, preencha seu nome e WhatsApp.");
+    if (!name.trim() || !whatsapp.trim() || !email.trim()) {
+      toast.error("Por favor, preencha nome, WhatsApp e e-mail.");
       return;
     }
 
@@ -47,20 +47,30 @@ const ReservationModal = ({
       return;
     }
 
-    if (!productId) return;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      toast.error("Informe um e-mail válido.");
+      return;
+    }
+
+    if (cartItems.length === 0) return;
 
     setLoading(true);
     try {
-      const { error } = await supabase.from("reservations").insert({
-        product_id: productId,
+      const reservations = cartItems.map((item) => ({
+        product_id: item.productId,
         guest_name: name.trim(),
         guest_whatsapp: whatsapp.trim(),
+        guest_email: email.trim(),
         message: message.trim() || null,
-      });
+        quantity: item.quantity,
+      }));
+
+      const { error } = await supabase.from("reservations").insert(reservations);
 
       if (error) {
         if (error.message.includes("no longer available")) {
-          toast.error("Este item já foi totalmente reservado!");
+          toast.error("Um ou mais itens já foram totalmente reservados!");
         } else {
           toast.error("Erro ao reservar. Tente novamente.");
         }
@@ -71,6 +81,7 @@ const ReservationModal = ({
       toast.success("Reserva realizada com sucesso! 🎉");
       setName("");
       setWhatsapp("");
+      setEmail("");
       setMessage("");
       onSuccess();
       onClose();
@@ -86,11 +97,15 @@ const ReservationModal = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-heading">
-            <Heart className="h-5 w-5 text-secondary" />
-            Reservar Presente
+            <Heart className="h-5 w-5 text-primary" />
+            Finalizar Reserva
+            <Sun className="h-4 w-4 text-primary opacity-50" />
           </DialogTitle>
           <DialogDescription>
-            Você está reservando: <strong>{productName}</strong>
+            Você está reservando {cartItems.length} item(ns):
+            <span className="block mt-1 text-foreground font-medium">
+              {cartItems.map((i) => `${i.productName}${i.quantity > 1 ? ` (×${i.quantity})` : ""}`).join(", ")}
+            </span>
           </DialogDescription>
         </DialogHeader>
 
@@ -115,6 +130,19 @@ const ReservationModal = ({
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
               maxLength={20}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">E-mail *</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="seu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              maxLength={255}
               required
             />
           </div>

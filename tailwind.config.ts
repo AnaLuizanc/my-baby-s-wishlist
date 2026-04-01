@@ -52,11 +52,11 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         baby: {
-          pink: "hsl(var(--baby-pink))",
-          blue: "hsl(var(--baby-blue))",
-          mint: "hsl(var(--baby-mint))",
-          peach: "hsl(var(--baby-peach))",
-          lavender: "hsl(var(--baby-lavender))",
+          cream: "hsl(var(--baby-cream))",
+          canary: "hsl(var(--baby-canary))",
+          gold: "hsl(var(--baby-gold))",
+          honey: "hsl(var(--baby-honey))",
+          sunshine: "hsl(var(--baby-sunshine))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
