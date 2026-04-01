@@ -53,6 +53,7 @@ export type Database = {
       reservations: {
         Row: {
           created_at: string
+          guest_email: string
           guest_name: string
           guest_whatsapp: string
           id: string
@@ -61,6 +62,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          guest_email?: string
           guest_name: string
           guest_whatsapp: string
           id?: string
@@ -69,6 +71,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          guest_email?: string
           guest_name?: string
           guest_whatsapp?: string
           id?: string

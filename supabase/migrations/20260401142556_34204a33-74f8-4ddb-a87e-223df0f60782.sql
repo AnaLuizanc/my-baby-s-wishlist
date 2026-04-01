@@ -1,0 +1,1 @@
+ALTER TABLE public.reservations ADD COLUMN guest_email text NOT NULL DEFAULT '';
