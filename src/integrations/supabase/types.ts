@@ -53,27 +53,33 @@ export type Database = {
       reservations: {
         Row: {
           created_at: string
+          guest_email: string
           guest_name: string
           guest_whatsapp: string
           id: string
           message: string | null
           product_id: string
+          quantity: number
         }
         Insert: {
           created_at?: string
+          guest_email?: string
           guest_name: string
           guest_whatsapp: string
           id?: string
           message?: string | null
           product_id: string
+          quantity?: number
         }
         Update: {
           created_at?: string
+          guest_email?: string
           guest_name?: string
           guest_whatsapp?: string
           id?: string
           message?: string | null
           product_id?: string
+          quantity?: number
         }
         Relationships: [
           {

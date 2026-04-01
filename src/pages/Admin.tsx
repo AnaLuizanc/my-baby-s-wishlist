@@ -12,13 +12,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, LogIn, LogOut, ArrowLeft, MessageCircle } from "lucide-react";
+import { Trash2, LogIn, LogOut, ArrowLeft, MessageCircle, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { Database } from "@/integrations/supabase/types";
 
-type Reservation = Database["public"]["Tables"]["reservations"]["Row"] & {
+type Reservation = {
+  id: string;
+  product_id: string;
+  guest_name: string;
+  guest_whatsapp: string;
+  guest_email: string;
+  message: string | null;
+  quantity: number;
+  created_at: string;
   products: { name: string } | null;
 };
 
@@ -177,8 +183,10 @@ const Admin = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Presente</TableHead>
+                  <TableHead>Qtd</TableHead>
                   <TableHead>Convidado</TableHead>
                   <TableHead>WhatsApp</TableHead>
+                  <TableHead>E-mail</TableHead>
                   <TableHead>Mensagem</TableHead>
                   <TableHead>Data</TableHead>
                   <TableHead></TableHead>
@@ -190,8 +198,15 @@ const Admin = () => {
                     <TableCell className="font-medium text-sm">
                       {r.products?.name ?? "—"}
                     </TableCell>
+                    <TableCell className="text-sm">{r.quantity}</TableCell>
                     <TableCell className="text-sm">{r.guest_name}</TableCell>
                     <TableCell className="text-sm">{r.guest_whatsapp}</TableCell>
+                    <TableCell className="text-sm">
+                      <span className="flex items-center gap-1">
+                        <Mail className="h-3 w-3 text-muted-foreground" />
+                        {r.guest_email}
+                      </span>
+                    </TableCell>
                     <TableCell className="text-sm max-w-[200px]">
                       {r.message ? (
                         <span className="flex items-start gap-1">
