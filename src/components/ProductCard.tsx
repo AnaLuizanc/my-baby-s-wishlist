@@ -41,7 +41,7 @@ const ProductCard = ({
 
   return (
     <div
-      className={`group relative rounded-lg border bg-card p-4 transition-all duration-300 animate-fade-in ${
+      className={`group relative rounded-lg border bg-card p-4 transition-all duration-300 animate-fade-in flex flex-col justify-between h-full ${
         isFullyReserved ? "opacity-60" : "hover:shadow-md hover:-translate-y-0.5"
       }`}
     >

@@ -43,7 +43,7 @@ const Index = () => {
             <Baby className="h-8 w-8 text-primary" />
           </div>
           <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-foreground mb-2">
-            Enxoval do Nénem 🍼
+            Enxoval do Neném 🍼
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Escolha os presentes da nossa lista e adicione ao carrinho.
