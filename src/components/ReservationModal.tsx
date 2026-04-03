@@ -36,6 +36,14 @@ const ReservationModal = ({
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleWhatsappChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+    if (value.length > 2) value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+    if (value.length > 10) value = `${value.slice(0, 10)}-${value.slice(10)}`;
+    setWhatsapp(value);
+  };
+
   useEffect(() => {
     if (open && cartItems.length === 0) {
       onClose();
@@ -151,8 +159,8 @@ const ReservationModal = ({
               id="whatsapp"
               placeholder="(11) 99999-9999"
               value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              maxLength={20}
+              onChange={handleWhatsappChange}
+              maxLength={15}
               required
             />
           </div>
