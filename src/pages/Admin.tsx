@@ -239,7 +239,7 @@ const Admin = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Presente</TableHead>
-                      <TableHead>Qtd</TableHead>
+                      <TableHead>Quantidade</TableHead>
                       <TableHead>Convidado</TableHead>
                       <TableHead>WhatsApp</TableHead>
                       <TableHead>E-mail</TableHead>
