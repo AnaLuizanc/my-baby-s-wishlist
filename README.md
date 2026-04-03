@@ -27,27 +27,23 @@ Siga os passos abaixo para rodar o projeto em sua máquina:
 Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 18 ou superior) instalado em sua máquina.
 
 ### 2. Instalando as dependências
-\`\`\`bash
+```bash
 npm install
-# ou
-bun install
-\`\`\`
+```
 
 ### 3. Configurando Variáveis de Ambiente
 Certifique-se de configurar as variáveis de ambiente com as chaves do Supabase e URL do Banco de Dados no servidor. 
 
 ### 4. Executando as Migrations do Banco (Prisma)
-\`\`\`bash
+```bash
 npx prisma generate
 npx prisma migrate dev
-\`\`\`
+```
 
 ### 5. Iniciando o servidor de desenvolvimento
-\`\`\`bash
+```bash
 npm run dev
-# ou
-bun run dev
-\`\`\`
+```
 O projeto estará acessível pelo navegador geralmente na porta configurada pelo Vite.
 
 ## 📝 Licença
