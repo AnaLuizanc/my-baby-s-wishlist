@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,13 +12,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Heart, Sun } from "lucide-react";
+import { Heart, Sun, Trash2 } from "lucide-react";
 import type { CartItem } from "@/hooks/useCart";
 
 interface ReservationModalProps {
   open: boolean;
   onClose: () => void;
   cartItems: CartItem[];
+  onRemoveItem: (productId: string) => void;
   onSuccess: () => void;
 }
 
@@ -26,6 +27,7 @@ const ReservationModal = ({
   open,
   onClose,
   cartItems,
+  onRemoveItem,
   onSuccess,
 }: ReservationModalProps) => {
   const [name, setName] = useState("");
@@ -33,6 +35,12 @@ const ReservationModal = ({
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (open && cartItems.length === 0) {
+      onClose();
+    }
+  }, [open, cartItems.length, onClose]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,11 +109,26 @@ const ReservationModal = ({
             Finalizar Reserva
             <Sun className="h-4 w-4 text-primary opacity-50" />
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="pt-2 text-left">
             Você está reservando {cartItems.length} item(ns):
-            <span className="block mt-1 text-foreground font-medium">
-              {cartItems.map((i) => `${i.productName}${i.quantity > 1 ? ` (×${i.quantity})` : ""}`).join(", ")}
-            </span>
+            <div className="mt-3 max-h-40 overflow-y-auto space-y-2 pr-2">
+              {cartItems.map((i) => (
+                <div key={i.productId} className="flex justify-between items-center bg-muted/50 p-2 rounded-md border text-left">
+                  <span className="text-foreground text-sm font-medium line-clamp-1">
+                    {i.productName} <span className="text-muted-foreground whitespace-nowrap">{i.quantity > 1 ? ` (×${i.quantity})` : ""}</span>
+                  </span>
+                  <Button 
+                    type="button"
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive shrink-0"
+                    onClick={() => onRemoveItem(i.productId)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
           </DialogDescription>
         </DialogHeader>
 

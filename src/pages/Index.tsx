@@ -98,6 +98,7 @@ const Index = () => {
         open={showCheckout}
         onClose={() => setShowCheckout(false)}
         cartItems={cart.items}
+        onRemoveItem={cart.removeItem}
         onSuccess={() => {
           cart.clearCart();
           queryClient.invalidateQueries({ queryKey: ["products"] });
