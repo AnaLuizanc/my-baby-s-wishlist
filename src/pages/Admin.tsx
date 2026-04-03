@@ -12,6 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Trash2, LogIn, LogOut, ArrowLeft, MessageCircle, Mail, Plus, Edit } from "lucide-react";
@@ -40,6 +50,8 @@ const Admin = () => {
   // Estados do Produto
   const [productFormOpen, setProductFormOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<ProductRow | null>(null);
+  const [productSearch, setProductSearch] = useState("");
+  const [reservationToDelete, setReservationToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -74,7 +86,7 @@ const Admin = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("name", { ascending: true });
       if (error) throw error;
       return data as ProductRow[];
     },
@@ -95,9 +107,9 @@ const Admin = () => {
     await supabase.auth.signOut();
   };
 
-  const handleDeleteReservation = async (id: string) => {
-    if (!confirm("Tem certeza que deseja cancelar esta reserva?")) return;
-    const { error } = await supabase.from("reservations").delete().eq("id", id);
+  const executeDeleteReservation = async () => {
+    if (!reservationToDelete) return;
+    const { error } = await supabase.from("reservations").delete().eq("id", reservationToDelete);
     if (error) {
       toast.error("Erro ao excluir reserva.");
       return;
@@ -106,6 +118,7 @@ const Admin = () => {
     queryClient.invalidateQueries({ queryKey: ["admin-reservations"] });
     queryClient.invalidateQueries({ queryKey: ["products"] });
     queryClient.invalidateQueries({ queryKey: ["admin-products"] });
+    setReservationToDelete(null);
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -280,7 +293,7 @@ const Admin = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDeleteReservation(r.id)}
+                            onClick={() => setReservationToDelete(r.id)}
                             className="text-destructive hover:text-destructive"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -327,12 +340,20 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="produtos">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
               <h2 className="text-lg font-medium">Produtos Cadastrados</h2>
-              <Button onClick={openNewProductForm} size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Adicionar Produto
-              </Button>
+              <div className="flex w-full sm:w-auto items-center gap-2">
+                <Input 
+                  placeholder="Pesquisar produto..." 
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="max-w-xs"
+                />
+                <Button onClick={openNewProductForm} size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Adicionar Produto
+                </Button>
+              </div>
             </div>
 
             {loadingProducts ? (
@@ -354,7 +375,9 @@ const Admin = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {adminProducts.map((p) => (
+                    {adminProducts
+                      .filter(p => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()))
+                      .map((p) => (
                       <TableRow key={p.id}>
                         <TableCell className="font-medium">{p.name}</TableCell>
                         <TableCell className="text-sm">{getCategoryLabel(p.category)}</TableCell>
@@ -390,6 +413,23 @@ const Admin = () => {
           </TabsContent>
         </Tabs>
       </main>
+
+      <AlertDialog open={!!reservationToDelete} onOpenChange={(open) => !open && setReservationToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancelar reserva?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja cancelar esta reserva? Esta ação não pode ser desfeita e o produto voltará a ficar disponível para outros convidados.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogAction onClick={executeDeleteReservation} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Sim, cancelar reserva
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <ProductAdminForm 
         open={productFormOpen}
