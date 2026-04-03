@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { supabase } from "@/integrations/supabase/client";
-import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,7 +47,6 @@ type ProductAdminFormProps = {
 };
 
 export default function ProductAdminForm({ open, onClose, product }: ProductAdminFormProps) {
-  const queryClient = useQueryClient();
   const isEditing = !!product;
 
   const { register, handleSubmit, control, formState: { errors, isSubmitting }, reset } = useForm<FormValues>({
@@ -89,39 +86,18 @@ export default function ProductAdminForm({ open, onClose, product }: ProductAdmi
   }, [open, product, reset]);
 
   const onSubmit = async (data: FormValues) => {
-    try {
-      const payload = {
-        name: data.name,
-        description: data.description || null,
-        image_url: data.image_url || null,
-        category: data.category as any,
-        quantity_total: data.quantity_total,
-        purchase_link: data.purchase_link || null
-      };
+    toast.info("Demonstração de Portifólio", {
+      description: "As funções de Salvar/Editar Banco de Dados estão desabilitadas. Se estivesse rodando, o produto seria perfeitamente processado!",
+      duration: 6000
+    });
 
-      if (isEditing && product) {
-        const { error } = await supabase
-          .from("products")
-          .update(payload)
-          .eq("id", product.id);
-        
-        if (error) throw error;
-        toast.success("Produto atualizado com sucesso!");
-      } else {
-        const { error } = await supabase
-          .from("products")
-          .insert(payload);
-        
-        if (error) throw error;
-        toast.success("Produto adicionado com sucesso!");
-      }
-      
-      queryClient.invalidateQueries({ queryKey: ["admin-products"] });
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      onClose();
-    } catch (error: any) {
-      toast.error("Erro ao salvar produto: " + error.message);
+    if (isEditing) {
+      toast.success("Produto atualizado com sucesso (Simulação)!");
+    } else {
+      toast.success("Produto adicionado com sucesso (Simulação)!");
     }
+
+    onClose();
   };
 
   return (
@@ -140,9 +116,9 @@ export default function ProductAdminForm({ open, onClose, product }: ProductAdmi
 
           <div className="space-y-2">
             <Label htmlFor="description">Descrição</Label>
-            <Textarea 
-              id="description" 
-              {...register("description")} 
+            <Textarea
+              id="description"
+              {...register("description")}
               placeholder="Opcional. Ex: Cor azul, marca X..."
               className="resize-none"
             />
@@ -174,11 +150,11 @@ export default function ProductAdminForm({ open, onClose, product }: ProductAdmi
 
             <div className="space-y-2">
               <Label htmlFor="quantity_total">Quantidade Total *</Label>
-              <Input 
-                id="quantity_total" 
-                type="number" 
-                min="1" 
-                {...register("quantity_total")} 
+              <Input
+                id="quantity_total"
+                type="number"
+                min="1"
+                {...register("quantity_total")}
               />
               {errors.quantity_total && <p className="text-xs text-destructive">{errors.quantity_total.message}</p>}
             </div>

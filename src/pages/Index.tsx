@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import CategoryAccordion from "@/components/CategoryAccordion";
 import ReservationModal from "@/components/ReservationModal";
 import CartBar from "@/components/CartBar";
@@ -8,23 +6,14 @@ import { useCart } from "@/hooks/useCart";
 import { Baby, ShieldCheck, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { MOCK_PRODUCTS } from "@/data/mockData";
 
 const Index = () => {
-  const queryClient = useQueryClient();
   const cart = useCart();
   const [showCheckout, setShowCheckout] = useState(false);
 
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .order("name");
-      if (error) throw error;
-      return data;
-    },
-  });
+  const products = MOCK_PRODUCTS;
+  const isLoading = false;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -43,7 +32,7 @@ const Index = () => {
             <Baby className="h-8 w-8 text-primary" />
           </div>
           <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-foreground mb-2">
-            Enxoval do Neném de Ana Flávia e Gabriel🍼
+            Enxoval do Neném 🍼
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Escolha os presentes da nossa lista e adicione ao carrinho.
@@ -54,6 +43,16 @@ const Index = () => {
 
       {/* Content */}
       <main className="container max-w-3xl mx-auto py-6 px-4">
+        <div className="bg-primary/10 border-l-4 border-primary p-4 rounded-r-lg mb-8 shadow-sm">
+          <h3 className="font-bold text-primary flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4" />
+            Versão de Demonstração (Portifólio)
+          </h3>
+          <p className="text-sm text-foreground/80 mt-1">
+            Esta é uma cópia estática do sistema criada para exibição. Sinta-se à vontade para gerenciar reservas, editar produtos e navegar no painel de administrador tranquilamente sem afetar dados reais!
+          </p>
+        </div>
+
         {isLoading ? (
           <div className="flex justify-center py-20">
             <div className="animate-pulse text-muted-foreground">
@@ -101,7 +100,6 @@ const Index = () => {
         onRemoveItem={cart.removeItem}
         onSuccess={() => {
           cart.clearCart();
-          queryClient.invalidateQueries({ queryKey: ["products"] });
         }}
       />
     </div>

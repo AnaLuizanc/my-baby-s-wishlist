@@ -14,11 +14,11 @@ import {
 import ProductCard from "./ProductCard";
 import { Pill, Shirt, BedDouble, Baby, Bath, Sun } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import type { Database } from "@/integrations/supabase/types";
 import type { CartItem } from "@/hooks/useCart";
+import type { ProductRow } from "@/components/ProductAdminForm";
 
-type Product = Database["public"]["Tables"]["products"]["Row"];
-type Category = Database["public"]["Enums"]["product_category"];
+type Product = ProductRow;
+type Category = "farmacia_cuidados" | "roupas" | "quarto_passeio" | "amamentacao" | "banho";
 
 const categoryConfig: Record<
   Category,

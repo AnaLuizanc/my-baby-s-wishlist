@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Heart, Sun, Trash2 } from "lucide-react";
 import type { CartItem } from "@/hooks/useCart";
@@ -72,27 +71,12 @@ const ReservationModal = ({
     if (cartItems.length === 0) return;
 
     setLoading(true);
-    try {
-      const reservations = cartItems.map((item) => ({
-        product_id: item.productId,
-        guest_name: name.trim(),
-        guest_whatsapp: whatsapp.trim(),
-        guest_email: email.trim(),
-        message: message.trim() || null,
-        quantity: item.quantity,
-      }));
 
-      const { error } = await supabase.from("reservations").insert(reservations);
-
-      if (error) {
-        if (error.message.includes("no longer available")) {
-          toast.error("Um ou mais itens já foram totalmente reservados!");
-        } else {
-          toast.error("Erro ao reservar. Tente novamente.");
-        }
-        console.error(error);
-        return;
-      }
+    setTimeout(() => {
+      toast.info("Demonstração de Portifólio", {
+        description: "Ações de integração com o banco de dados estão desabilitadas, mas seu formulário funcionou e o envio estaria perfeito!",
+        duration: 8000,
+      });
 
       toast.success("Reserva realizada com sucesso! 🎉");
       setName("");
@@ -101,11 +85,9 @@ const ReservationModal = ({
       setMessage("");
       onSuccess();
       onClose();
-    } catch {
-      toast.error("Erro inesperado. Tente novamente.");
-    } finally {
+
       setLoading(false);
-    }
+    }, 800);
   };
 
   return (
@@ -125,10 +107,10 @@ const ReservationModal = ({
                   <span className="text-foreground text-sm font-medium line-clamp-1">
                     {i.productName} <span className="text-muted-foreground whitespace-nowrap">{i.quantity > 1 ? ` (×${i.quantity})` : ""}</span>
                   </span>
-                  <Button 
+                  <Button
                     type="button"
-                    variant="ghost" 
-                    size="sm" 
+                    variant="ghost"
+                    size="sm"
                     className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive shrink-0"
                     onClick={() => onRemoveItem(i.productId)}
                   >

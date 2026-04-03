@@ -5,24 +5,24 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { LogIn, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 
 interface AdminLoginProps {
-  onLoadingChange: (loading: boolean) => void;
+  onLoginSuccess: () => void;
 }
 
-const AdminLogin = ({ onLoadingChange }: AdminLoginProps) => {
+const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    onLoadingChange(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      toast.error("Credenciais inválidas.");
-      onLoadingChange(false);
-    }
+
+    toast.info("Demonstração de Portifólio", {
+      description: "Como esta é uma demonstração, a autenticação foi contornada. Você entrará no painel de administrador agora.",
+      duration: 6000,
+    });
+
+    onLoginSuccess();
   };
 
   return (

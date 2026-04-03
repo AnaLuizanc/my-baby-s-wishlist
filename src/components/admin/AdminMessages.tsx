@@ -1,20 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { MOCK_RESERVATIONS } from "@/data/mockData";
 import { MessageCircle } from "lucide-react";
 import type { Reservation } from "./types";
 
 const AdminMessages = () => {
-  const { data: reservations = [], isLoading: loadingReservations } = useQuery({
-    queryKey: ["admin-reservations"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("reservations")
-        .select("*, products(name)")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data as Reservation[];
-    },
-  });
+  const reservations = MOCK_RESERVATIONS;
+  const loadingReservations = false;
 
   if (loadingReservations) {
     return <p className="text-muted-foreground text-center py-10">Carregando...</p>;
