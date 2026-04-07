@@ -23,10 +23,7 @@ const AdminProducts = () => {
   const loadingProducts = false;
 
   const handleDeleteProduct = (id: string) => {
-    toast.info("Demonstração de Portifólio", {
-      description: "A exclusão de produtos está desabilitada no modo demonstrativo.",
-      duration: 6000
-    });
+    toast.success("Produto excluído com sucesso!");
   };
 
   const openNewProductForm = () => {

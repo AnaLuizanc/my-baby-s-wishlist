@@ -86,15 +86,15 @@ export default function ProductAdminForm({ open, onClose, product }: ProductAdmi
   }, [open, product, reset]);
 
   const onSubmit = async (data: FormValues) => {
-    toast.info("Demonstração de Portifólio", {
+    toast.info("Demonstração", {
       description: "As funções de Salvar/Editar Banco de Dados estão desabilitadas. Se estivesse rodando, o produto seria perfeitamente processado!",
       duration: 6000
     });
 
     if (isEditing) {
-      toast.success("Produto atualizado com sucesso (Simulação)!");
+      toast.success("Produto atualizado com sucesso!");
     } else {
-      toast.success("Produto adicionado com sucesso (Simulação)!");
+      toast.success("Produto adicionado com sucesso!");
     }
 
     onClose();

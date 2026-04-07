@@ -73,11 +73,6 @@ const ReservationModal = ({
     setLoading(true);
 
     setTimeout(() => {
-      toast.info("Demonstração de Portifólio", {
-        description: "Ações de integração com o banco de dados estão desabilitadas, mas seu formulário funcionou e o envio estaria perfeito!",
-        duration: 8000,
-      });
-
       toast.success("Reserva realizada com sucesso! 🎉");
       setName("");
       setWhatsapp("");

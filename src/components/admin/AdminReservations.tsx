@@ -29,10 +29,7 @@ const AdminReservations = () => {
   const loadingReservations = false;
 
   const executeDeleteReservation = () => {
-    toast.info("Demonstração de Portifólio", {
-      description: "Operação de exclusão bloqueada na versão de demonstração.",
-      duration: 6000,
-    });
+    toast.success("Reserva excluída com sucesso!");
     setReservationToDelete(null);
   };
 
@@ -113,7 +110,7 @@ const AdminReservations = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Cancelar reserva?</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja cancelar esta reserva? Esta ação não pode ser desfeita e o produto voltará a ficar disponível para outros convidados. (Modo Portifólio demonstrativo)
+              Tem certeza que deseja cancelar esta reserva? Esta ação não pode ser desfeita e o produto voltará a ficar disponível para outros convidados.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

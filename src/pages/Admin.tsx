@@ -87,7 +87,7 @@ const Admin = () => {
         <div className="bg-primary/10 border-l-4 border-primary p-4 rounded-r-lg mb-8 shadow-sm">
           <h3 className="font-bold text-primary flex items-center gap-2">
             <ShieldCheck className="h-4 w-4" />
-            Versão de Demonstração (Portifólio)
+            Versão de Demonstração
           </h3>
           <p className="text-sm text-foreground/80 mt-1">
             Esta é uma cópia estática do sistema criada para exibição. Sinta-se à vontade para gerenciar reservas, editar produtos e navegar no painel de administrador tranquilamente sem afetar dados reais!

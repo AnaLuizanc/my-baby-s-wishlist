@@ -11,8 +11,8 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    toast.info("Acesso de Demonstração", {
-      description: "Como esta é uma versão de portfólio, o login foi simplificado. Aproveite para explorar o painel!",
+    toast.info("Acesso Autorizado", {
+      description: "Bem-vindo ao painel administrativo. O acesso foi simplificado para facilitar seu uso.",
       duration: 5000,
     });
 
@@ -32,10 +32,10 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
         
         <div className="bg-primary/5 border border-primary/20 rounded-md p-4 mb-6">
           <p className="text-sm text-foreground/80 leading-relaxed font-medium mb-1">
-            ✨ Login Simplificado
+            ✨ Acesso Rápido
           </p>
           <p className="text-xs text-muted-foreground">
-            Sinta-se à vontade para entrar e testar as funcionalidades administrativas. Não é necessário e-mail ou senha nesta demonstração.
+            Sinta-se à vontade para entrar e gerenciar o enxoval. Não é necessário e-mail ou senha.
           </p>
         </div>
 
