@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CategoryAccordion from "@/components/CategoryAccordion";
 import ReservationModal from "@/components/ReservationModal";
 import CartBar from "@/components/CartBar";
 import { useCart } from "@/hooks/useCart";
-import { Baby, ShieldCheck, Sun } from "lucide-react";
+import { Baby, ShieldCheck, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MOCK_PRODUCTS } from "@/data/mockData";
@@ -11,6 +11,19 @@ import { MOCK_PRODUCTS } from "@/data/mockData";
 const Index = () => {
   const cart = useCart();
   const [showCheckout, setShowCheckout] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  });
+
+  const toggleTheme = () => {
+    if (theme === "light") {
+      document.documentElement.classList.add("dark");
+      setTheme("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      setTheme("light");
+    }
+  };
 
   const products = MOCK_PRODUCTS;
   const isLoading = false;
@@ -18,14 +31,34 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-baby-cream via-baby-canary to-baby-honey py-12 px-4 text-center">
+      <header className="relative overflow-hidden bg-gradient-to-br from-baby-cream via-baby-canary to-baby-honey py-12 px-4 text-center transition-colors duration-500">
         <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: "radial-gradient(circle at 20% 50%, hsl(var(--baby-sunshine)) 0%, transparent 50%), radial-gradient(circle at 80% 50%, hsl(var(--baby-gold)) 0%, transparent 50%)"
+          backgroundImage: theme === "light" 
+            ? "radial-gradient(circle at 20% 50%, hsl(var(--baby-sunshine)) 0%, transparent 50%), radial-gradient(circle at 80% 50%, hsl(var(--baby-gold)) 0%, transparent 50%)"
+            : "radial-gradient(circle at 20% 50%, hsl(var(--baby-canary)) 0%, transparent 50%), radial-gradient(circle at 80% 50%, hsl(var(--primary)) 0%, transparent 50%)"
         }} />
-        {/* Sun decorations */}
-        <Sun className="absolute top-4 left-6 h-8 w-8 text-primary opacity-25" />
-        <Sun className="absolute top-8 right-10 h-6 w-6 text-primary opacity-20" />
-        <Sun className="absolute bottom-4 left-1/4 h-5 w-5 text-primary opacity-15" />
+        
+        {/* Toggle Button */}
+        <div className="absolute top-4 right-4 z-20">
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full bg-background/50 hover:bg-background/80 border-0 backdrop-blur" aria-label="Alternar tema">
+            {theme === "light" ? <Moon className="h-5 w-5 text-primary" /> : <Sun className="h-5 w-5 text-primary" />}
+          </Button>
+        </div>
+
+        {/* Decorations */}
+        {theme === "light" ? (
+          <>
+            <Sun className="absolute top-4 left-6 h-8 w-8 text-primary opacity-25" />
+            <Sun className="absolute top-8 right-10 h-6 w-6 text-primary opacity-20" />
+            <Sun className="absolute bottom-4 left-1/4 h-5 w-5 text-primary opacity-15" />
+          </>
+        ) : (
+          <>
+            <Moon className="absolute top-4 left-6 h-8 w-8 text-primary opacity-25" />
+            <Moon className="absolute top-8 right-10 h-6 w-6 text-primary opacity-20" />
+            <Moon className="absolute bottom-4 left-1/4 h-5 w-5 text-primary opacity-15" />
+          </>
+        )}
 
         <div className="relative z-10 container max-w-2xl mx-auto">
           <div className="inline-flex items-center justify-center rounded-full bg-card/80 backdrop-blur p-4 mb-4 shadow-sm">
@@ -34,9 +67,9 @@ const Index = () => {
           <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-foreground mb-2">
             Enxoval do Neném 🍼
           </h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
+          <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto transition-colors">
             Escolha os presentes da nossa lista e adicione ao carrinho.
-            Sua presença já é o maior presente! ☀️
+            Sua presença já é o maior presente! {theme === "light" ? "☀️" : "🌙"}
           </p>
         </div>
       </header>

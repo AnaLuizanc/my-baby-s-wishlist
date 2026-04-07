@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import ProductCard from "./ProductCard";
-import { Pill, Shirt, BedDouble, Baby, Bath, Sun } from "lucide-react";
+import { Pill, Shirt, BedDouble, Baby, Bath, Sun, Moon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import type { CartItem } from "@/hooks/useCart";
 import type { ProductRow } from "@/components/ProductAdminForm";
@@ -106,7 +106,8 @@ const CategoryAccordion = ({ products, cartItems, onAddToCart }: CategoryAccordi
                     <span className="font-heading font-bold text-base">
                       {config.label}
                     </span>
-                    <Sun className="h-3 w-3 text-primary opacity-50" />
+                    <Sun className="h-3 w-3 text-primary opacity-50 dark:hidden" />
+                    <Moon className="h-3 w-3 text-primary opacity-50 hidden dark:block" />
                   </div>
                   <div className="flex items-center gap-2 w-full mt-1">
                     <Progress value={progressPercent} className="h-2 flex-1 max-w-[120px]" />

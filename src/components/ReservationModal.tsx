@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Heart, Sun, Trash2 } from "lucide-react";
+import { Heart, Sun, Moon, Trash2 } from "lucide-react";
 import type { CartItem } from "@/hooks/useCart";
 
 interface ReservationModalProps {
@@ -97,7 +97,8 @@ const ReservationModal = ({
           <DialogTitle className="flex items-center gap-2 font-heading">
             <Heart className="h-5 w-5 text-primary" />
             Finalizar Reserva
-            <Sun className="h-4 w-4 text-primary opacity-50" />
+            <Sun className="h-4 w-4 text-primary opacity-50 dark:hidden" />
+            <Moon className="h-4 w-4 text-primary opacity-50 hidden dark:block" />
           </DialogTitle>
           <DialogDescription className="pt-2 text-left">
             Você está reservando {cartItems.length} item(ns):

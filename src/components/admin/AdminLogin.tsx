@@ -1,7 +1,4 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { LogIn, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -11,15 +8,12 @@ interface AdminLoginProps {
 }
 
 const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    toast.info("Demonstração de Portifólio", {
-      description: "Como esta é uma demonstração, a autenticação foi contornada. Você entrará no painel de administrador agora.",
-      duration: 6000,
+    toast.info("Acesso de Demonstração", {
+      description: "Como esta é uma versão de portfólio, o login foi simplificado. Aproveite para explorar o painel!",
+      duration: 5000,
     });
 
     onLoginSuccess();
@@ -27,37 +21,27 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-card rounded-lg border p-6 shadow-sm">
-        <h1 className="font-heading text-xl font-bold mb-1 text-center">
+      <div className="w-full max-w-sm bg-card rounded-lg border p-8 shadow-sm text-center">
+        <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+          <LogIn className="h-6 w-6 text-primary" />
+        </div>
+        
+        <h1 className="font-heading text-xl font-bold mb-2">
           Painel dos Papais
         </h1>
-        <p className="text-sm text-muted-foreground text-center mb-6">
-          Faça login para gerenciar o enxoval
-        </p>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <Button type="submit" className="w-full">
-            <LogIn className="mr-2 h-4 w-4" />
-            Entrar
+        
+        <div className="bg-primary/5 border border-primary/20 rounded-md p-4 mb-6">
+          <p className="text-sm text-foreground/80 leading-relaxed font-medium mb-1">
+            ✨ Login Simplificado
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Sinta-se à vontade para entrar e testar as funcionalidades administrativas. Não é necessário e-mail ou senha nesta demonstração.
+          </p>
+        </div>
+
+        <form onSubmit={handleLogin}>
+          <Button type="submit" className="w-full py-6 text-base font-bold shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+            Entrar no Painel
           </Button>
         </form>
         <div className="mt-4 text-center">

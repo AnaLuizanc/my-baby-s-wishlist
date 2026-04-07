@@ -1,4 +1,4 @@
-import { ExternalLink, Gift, Check, Sun, Plus, Minus } from "lucide-react";
+import { ExternalLink, Gift, Check, Sun, Moon, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -46,7 +46,8 @@ const ProductCard = ({
       }`}
     >
       {/* Sun decoration */}
-      <Sun className="absolute top-2 right-2 h-4 w-4 text-primary opacity-30" />
+      <Sun className="absolute top-2 right-2 h-4 w-4 text-primary opacity-30 dark:hidden" />
+      <Moon className="absolute top-2 right-2 h-4 w-4 text-primary opacity-30 hidden dark:block" />
 
       {/* Image */}
       {imageUrl && (
