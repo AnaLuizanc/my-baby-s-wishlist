@@ -9,6 +9,7 @@ import AdminLogin from "@/components/admin/AdminLogin";
 import AdminReservations from "@/components/admin/AdminReservations";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminProducts from "@/components/admin/AdminProducts";
+import AdminSettings from "@/components/admin/AdminSettings";
 
 const Admin = () => {
   const [session, setSession] = useState<boolean>(false);
@@ -114,6 +115,7 @@ const Admin = () => {
             <TabsTrigger value="reservas">Reservas</TabsTrigger>
             <TabsTrigger value="produtos">Produtos no Enxoval</TabsTrigger>
             <TabsTrigger value="mensagens">Mensagens</TabsTrigger>
+            <TabsTrigger value="configuracoes">Configurações</TabsTrigger>
           </TabsList>
 
           <TabsContent value="reservas">
@@ -126,6 +128,10 @@ const Admin = () => {
 
           <TabsContent value="produtos">
             <AdminProducts />
+          </TabsContent>
+
+          <TabsContent value="configuracoes">
+            <AdminSettings />
           </TabsContent>
         </Tabs>
       </main>

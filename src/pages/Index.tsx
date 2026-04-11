@@ -26,6 +26,20 @@ const Index = () => {
     },
   });
 
+  const { data: headerTitle } = useQuery({
+    queryKey: ["settings", "header_title"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("settings")
+        .select("value")
+        .eq("key", "header_title")
+        .maybeSingle();
+        
+      if (error) console.error("Error fetching header title:", error);
+      return data?.value || "Enxoval do Neném de Ana Flávia e Gabriel🍼";
+    },
+  });
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
@@ -43,7 +57,7 @@ const Index = () => {
             <Baby className="h-8 w-8 text-primary" />
           </div>
           <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-foreground mb-2">
-            Enxoval do Neném de Ana Flávia e Gabriel🍼
+            {headerTitle || "Enxoval do Neném de Ana Flávia e Gabriel🍼"}
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto">
             Escolha os presentes da nossa lista e adicione ao carrinho.
