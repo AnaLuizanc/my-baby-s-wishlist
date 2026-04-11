@@ -28,16 +28,30 @@ const Index = () => {
   const products = MOCK_PRODUCTS;
   const isLoading = false;
 
+  const { data: headerTitle } = useQuery({
+    queryKey: ["settings", "header_title"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("settings")
+        .select("value")
+        .eq("key", "header_title")
+        .maybeSingle();
+
+      if (error) console.error("Error fetching header title:", error);
+      return data?.value || "Enxoval do Neném de Ana Flávia e Gabriel🍼";
+    },
+  });
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <header className="relative overflow-hidden bg-gradient-to-br from-baby-cream via-baby-canary to-baby-honey py-12 px-4 text-center transition-colors duration-500">
         <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: theme === "light" 
+          backgroundImage: theme === "light"
             ? "radial-gradient(circle at 20% 50%, hsl(var(--baby-sunshine)) 0%, transparent 50%), radial-gradient(circle at 80% 50%, hsl(var(--baby-gold)) 0%, transparent 50%)"
             : "radial-gradient(circle at 20% 50%, hsl(var(--baby-canary)) 0%, transparent 50%), radial-gradient(circle at 80% 50%, hsl(var(--primary)) 0%, transparent 50%)"
         }} />
-        
+
         {/* Toggle Button */}
         <div className="absolute top-4 right-4 z-20">
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full bg-background/50 hover:bg-background/80 border-0 backdrop-blur" aria-label="Alternar tema">
@@ -65,7 +79,7 @@ const Index = () => {
             <Baby className="h-8 w-8 text-primary" />
           </div>
           <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-foreground mb-2">
-            Enxoval do Neném 🍼
+            {headerTitle || "Enxoval do Neném de Ana Flávia e Gabriel🍼"}
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto transition-colors">
             Escolha os presentes da nossa lista e adicione ao carrinho.
