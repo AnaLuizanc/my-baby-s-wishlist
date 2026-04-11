@@ -28,19 +28,26 @@ const Index = () => {
   const products = MOCK_PRODUCTS;
   const isLoading = false;
 
-  const { data: headerTitle } = useQuery({
-    queryKey: ["settings", "header_title"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("settings")
-        .select("value")
-        .eq("key", "header_title")
-        .maybeSingle();
+  const [headerTitle, setHeaderTitle] = useState("Enxoval do Neném🍼");
 
-      if (error) console.error("Error fetching header title:", error);
-      return data?.value || "Enxoval do Neném de Ana Flávia e Gabriel🍼";
-    },
-  });
+  useEffect(() => {
+    const fetchTitle = () => {
+      const savedTitle = localStorage.getItem("demo_header_title");
+      if (savedTitle) {
+        setHeaderTitle(savedTitle);
+      }
+    };
+
+    // Fetch initially
+    fetchTitle();
+
+    // Listen for custom event from admin panel to update immediately
+    window.addEventListener("settings_updated", fetchTitle);
+    
+    return () => {
+      window.removeEventListener("settings_updated", fetchTitle);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -70,7 +77,7 @@ const Index = () => {
           <>
             <Moon className="absolute top-4 left-6 h-8 w-8 text-primary opacity-25" />
             <Moon className="absolute top-8 right-10 h-6 w-6 text-primary opacity-20" />
-            <Moon className="absolute bottom-4 left-1/4 h-5 w-5 text-primary opacity-15" />
+            <Moon className="absolute bottFom-4 left-1/4 h-5 w-5 text-primary opacity-15" />
           </>
         )}
 
@@ -79,7 +86,7 @@ const Index = () => {
             <Baby className="h-8 w-8 text-primary" />
           </div>
           <h1 className="font-heading text-3xl md:text-4xl font-extrabold text-foreground mb-2">
-            {headerTitle || "Enxoval do Neném de Ana Flávia e Gabriel🍼"}
+            {headerTitle || "Enxoval do Neném 🍼"}
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-md mx-auto transition-colors">
             Escolha os presentes da nossa lista e adicione ao carrinho.

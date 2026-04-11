@@ -1,79 +1,42 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Save } from "lucide-react";
 
 const AdminSettings = () => {
-  const queryClient = useQueryClient();
   const [headerTitle, setHeaderTitle] = useState("");
-
-  const { data: currentTitle, isLoading } = useQuery({
-    queryKey: ["settings", "header_title"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("settings")
-        .select("value")
-        .eq("key", "header_title")
-        .maybeSingle();
-
-      if (error) throw error;
-      return data?.value || "Enxoval do Neném de Ana Flávia e Gabriel🍼";
-    },
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (currentTitle) {
-      setHeaderTitle(currentTitle);
-    }
-  }, [currentTitle]);
-
-  const updateSettingMutation = useMutation({
-    mutationFn: async (newValue: string) => {
-      // First try to select to see if it exists
-      const { data } = await supabase
-        .from("settings")
-        .select("key")
-        .eq("key", "header_title")
-        .maybeSingle();
-
-      let error;
-      if (data) {
-        // Update existing
-        const res = await supabase
-          .from("settings")
-          .update({ value: newValue })
-          .eq("key", "header_title");
-        error = res.error;
-      } else {
-        // Insert new
-        const res = await supabase
-          .from("settings")
-          .insert({ key: "header_title", value: newValue });
-        error = res.error;
-      }
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
-      toast.success("Configurações salvas com sucesso!");
-    },
-    onError: (error) => {
-      console.error("Error updating settings:", error);
-      toast.error("Erro ao salvar as configurações.");
-    },
-  });
+    // Simulate network request for demonstration
+    const timer = setTimeout(() => {
+      const savedTitle = localStorage.getItem("demo_header_title");
+      setHeaderTitle(savedTitle || "Enxoval do Neném 🍼");
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSave = () => {
     if (!headerTitle.trim()) {
       toast.error("O título não pode estar vazio.");
       return;
     }
-    updateSettingMutation.mutate(headerTitle);
+    
+    setIsSaving(true);
+    // Simulate network request
+    setTimeout(() => {
+      localStorage.setItem("demo_header_title", headerTitle);
+      
+      // Dispatch a custom event so Index.tsx can update the title immediately
+      window.dispatchEvent(new Event("settings_updated"));
+      
+      setIsSaving(false);
+      toast.success("Configurações salvas com sucesso!");
+    }, 500);
   };
 
   if (isLoading) {
@@ -105,10 +68,10 @@ const AdminSettings = () => {
 
           <Button 
             onClick={handleSave} 
-            disabled={updateSettingMutation.isPending}
+            disabled={isSaving}
             className="w-full sm:w-auto"
           >
-            {updateSettingMutation.isPending ? (
+            {isSaving ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Save className="mr-2 h-4 w-4" />
